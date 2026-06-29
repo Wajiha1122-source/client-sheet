@@ -73,7 +73,6 @@ for (const moduleName of ["graceful-fs", "next/dist/compiled/graceful-fs"]) {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  distDir: "build",
   webpack(config) {
     config.resolve.symlinks = false;
     return config;

@@ -37,7 +37,7 @@ Import the same Git repository as a Next.js project.
 - Root Directory: `./`
 - Install Command: `npm install`
 - Build Command: `npm run build`
-- Output Directory: leave blank
+- Output Directory: leave blank so Vercel uses Next.js default `.next`
 - Environment Variables:
   - `DATABASE_URL`: PostgreSQL connection string
   - `SESSION_SECRET`: a long random string
