@@ -1,4 +1,6 @@
 .next
+build
+build-output
 node_modules
 .env*.local
 .env

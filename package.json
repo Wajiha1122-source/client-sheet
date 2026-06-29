@@ -2,6 +2,9 @@
   "name": "client-sheet",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20 <23"
+  },
   "scripts": {
     "dev": "node -r ./scripts/readlink-patch.cjs node_modules/next/dist/bin/next dev",
     "build": "node -r ./scripts/readlink-patch.cjs node_modules/next/dist/bin/next build",
