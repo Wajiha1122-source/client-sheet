@@ -24,7 +24,7 @@ function ssoSecretKey() {
 
 function rejectSso(reason) {
   console.warn(`SSO login rejected: ${reason}`);
-  return new NextResponse("SSO login failed.", {
+  return new NextResponse(`SSO login failed: ${reason}.`, {
     status: 401,
     headers: {
       "content-type": "text/plain; charset=utf-8",
