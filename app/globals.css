@@ -327,6 +327,20 @@ textarea {
   margin-bottom: 14px;
 }
 
+.client-form {
+  grid-column: span 1;
+}
+
+.form-section {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 14px;
+}
+
+.form-section .field {
+  min-width: 0;
+}
+
 .field label {
   font-weight: 800;
   font-size: 13px;
@@ -362,7 +376,7 @@ table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  min-width: 760px;
+  min-width: 1180px;
 }
 
 th,
@@ -483,7 +497,8 @@ tbody tr:hover {
   .shell,
   .login-card,
   .grid-2,
-  .grid-3 {
+  .grid-3,
+  .form-section {
     grid-template-columns: 1fr;
   }
 

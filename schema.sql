@@ -37,6 +37,22 @@ CREATE TABLE IF NOT EXISTS client_entries (
   month_id UUID NOT NULL REFERENCES entry_months(id) ON DELETE CASCADE,
   office_id UUID NOT NULL REFERENCES offices(id) ON DELETE CASCADE,
   entry_date DATE NOT NULL,
+  id_number TEXT,
+  city_area TEXT,
+  business_name TEXT,
+  phone_whatsapp TEXT,
+  consumer_type TEXT,
+  interested_in TEXT,
+  lead_quality TEXT,
+  timeline TEXT,
+  market TEXT,
+  experience TEXT,
+  knowledge_baseline TEXT,
+  handled_by TEXT,
+  visit_date_time TIMESTAMPTZ,
+  visitor_no TEXT,
+  forwarded_by TEXT,
+  notes TEXT,
   client_name TEXT NOT NULL,
   address TEXT NOT NULL,
   contact TEXT NOT NULL,
@@ -57,6 +73,23 @@ CREATE TABLE IF NOT EXISTS activity_logs (
   metadata JSONB NOT NULL DEFAULT '{}',
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS id_number TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS city_area TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS business_name TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS phone_whatsapp TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS consumer_type TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS interested_in TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS lead_quality TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS timeline TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS market TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS experience TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS knowledge_baseline TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS handled_by TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS visit_date_time TIMESTAMPTZ;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS visitor_no TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS forwarded_by TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS notes TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_client_entries_office_month ON client_entries(office_id, month_id);
 CREATE INDEX IF NOT EXISTS idx_client_entries_date ON client_entries(entry_date);

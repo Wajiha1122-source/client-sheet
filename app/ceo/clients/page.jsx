@@ -25,7 +25,17 @@ export default async function CeoClientsPage({ searchParams }) {
   }
   if (search) {
     params.push(`%${search}%`);
-    where.push(`(ce.client_name ILIKE $${params.length} OR ce.contact ILIKE $${params.length} OR ce.query ILIKE $${params.length} OR ce.result ILIKE $${params.length})`);
+    where.push(`(
+      ce.client_name ILIKE $${params.length}
+      OR ce.contact ILIKE $${params.length}
+      OR ce.query ILIKE $${params.length}
+      OR ce.result ILIKE $${params.length}
+      OR ce.business_name ILIKE $${params.length}
+      OR ce.phone_whatsapp ILIKE $${params.length}
+      OR ce.city_area ILIKE $${params.length}
+      OR ce.interested_in ILIKE $${params.length}
+      OR ce.lead_quality ILIKE $${params.length}
+    )`);
   }
 
   const entries = await query(
@@ -65,14 +75,34 @@ export default async function CeoClientsPage({ searchParams }) {
           </div>
           <div className="field">
             <label>Search</label>
-            <input name="search" defaultValue={search} placeholder="Name, contact, query, result" />
+            <input name="search" defaultValue={search} placeholder="Business, phone, city, interest, lead" />
           </div>
           <button className="button" type="submit">Filter</button>
         </form>
         <div className="table-wrap">
           <table>
             <thead>
-              <tr><th>Date</th><th>Office</th><th>Month</th><th>Name</th><th>Address</th><th>Contact</th><th>Query</th><th>Result</th></tr>
+              <tr>
+                <th>Date</th>
+                <th>Office</th>
+                <th>Month</th>
+                <th>ID</th>
+                <th>Business</th>
+                <th>City / Area</th>
+                <th>Phone</th>
+                <th>Type</th>
+                <th>Interest</th>
+                <th>Lead</th>
+                <th>Timeline</th>
+                <th>Market</th>
+                <th>Experience</th>
+                <th>Knowledge</th>
+                <th>Handled By</th>
+                <th>Visit Time</th>
+                <th>Visitor No.</th>
+                <th>Forwarded By</th>
+                <th>Notes</th>
+              </tr>
             </thead>
             <tbody>
               {entries.rows.map((entry) => (
@@ -80,11 +110,22 @@ export default async function CeoClientsPage({ searchParams }) {
                   <td>{new Date(entry.entry_date).toLocaleDateString()}</td>
                   <td>{entry.office_name}</td>
                   <td>{entry.month_title}</td>
-                  <td>{entry.client_name}</td>
-                  <td>{entry.address}</td>
-                  <td>{entry.contact}</td>
-                  <td>{entry.query}</td>
-                  <td>{entry.result}</td>
+                  <td>{entry.id_number}</td>
+                  <td>{entry.business_name || entry.client_name}</td>
+                  <td>{entry.city_area || entry.address}</td>
+                  <td>{entry.phone_whatsapp || entry.contact}</td>
+                  <td>{entry.consumer_type}</td>
+                  <td>{entry.interested_in || entry.query}</td>
+                  <td>{entry.lead_quality || entry.result}</td>
+                  <td>{entry.timeline}</td>
+                  <td>{entry.market}</td>
+                  <td>{entry.experience}</td>
+                  <td>{entry.knowledge_baseline}</td>
+                  <td>{entry.handled_by}</td>
+                  <td>{entry.visit_date_time ? new Date(entry.visit_date_time).toLocaleString() : ""}</td>
+                  <td>{entry.visitor_no}</td>
+                  <td>{entry.forwarded_by}</td>
+                  <td>{entry.notes}</td>
                 </tr>
               ))}
             </tbody>
