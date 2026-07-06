@@ -86,14 +86,7 @@ export default async function OfficeDashboard({ searchParams }) {
         <div className="card"><div className="label">Selected entries</div><div className="stat">{entries.rows.length}</div></div>
       </section>
 
-      <section className="grid grid-2" style={{ marginTop: 18 }}>
-        <form className="card" action="/api/months" method="post">
-          <h2>Add Month</h2>
-          <div className="field"><label>Month</label><input name="monthKey" type="month" required /></div>
-          <div className="field"><label>Notes</label><textarea name="notes" rows={3} placeholder="Optional office note" /></div>
-          <button className="button" type="submit"><CalendarPlus size={18} /> Add Month</button>
-        </form>
-
+      <section className="dashboard-entry-layout" style={{ marginTop: 18 }}>
         <form className="card client-form" action="/api/entries" method="post">
           <h2>Add Client Entry</h2>
           <div className="form-section">
@@ -133,6 +126,13 @@ export default async function OfficeDashboard({ searchParams }) {
           </div>
           <div className="field"><label>Notes</label><textarea name="notes" rows={4} /></div>
           <button className="button" type="submit"><Plus size={18} /> Save Entry</button>
+        </form>
+
+        <form className="card month-panel" action="/api/months" method="post">
+          <h2>Add Month</h2>
+          <div className="field"><label>Month</label><input name="monthKey" type="month" required /></div>
+          <div className="field"><label>Notes</label><textarea name="notes" rows={3} placeholder="Optional office note" /></div>
+          <button className="button" type="submit"><CalendarPlus size={18} /> Add Month</button>
         </form>
       </section>
 
