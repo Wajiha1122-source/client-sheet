@@ -97,10 +97,11 @@ export default async function OfficeDashboard({ searchParams }) {
                 {months.rows.map((month) => <option key={month.id} value={month.id}>{month.title}</option>)}
               </select>
             </div>
-            <div className="field"><label>ID No.</label><input name="idNumber" placeholder="Visitor card ID" /></div>
+            <div className="field"><label>ID No.</label><input name="idNumber" /></div>
             <div className="field"><label>Date</label><input name="entryDate" type="date" required /></div>
           </div>
 
+          <h3 className="form-section-title">Visitor Info</h3>
           <div className="form-section">
             <div className="field"><label>City / Area</label><input name="cityArea" required /></div>
             <div className="field"><label>Business Name</label><input name="businessName" required /></div>
