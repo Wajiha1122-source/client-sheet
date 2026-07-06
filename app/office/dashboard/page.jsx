@@ -43,6 +43,11 @@ function SelectField({ label, name, options, required = true }) {
   );
 }
 
+function formatDate(value) {
+  if (!value) return "";
+  return new Date(value).toISOString().slice(0, 10);
+}
+
 export default async function OfficeDashboard({ searchParams }) {
   const user = await requireUser("OFFICE");
   const selectedMonth = searchParams?.month || "";
@@ -150,7 +155,7 @@ export default async function OfficeDashboard({ searchParams }) {
             <tbody>
               {entries.rows.map((entry) => (
                 <tr key={entry.id}>
-                  <td>{new Date(entry.entry_date).toLocaleDateString()}</td>
+                  <td>{formatDate(entry.entry_date)}</td>
                   <td>{entry.id_number}</td>
                   <td>{entry.business_name || entry.client_name}</td>
                   <td>{entry.city_area || entry.address}</td>

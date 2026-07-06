@@ -2,6 +2,11 @@ import Link from "next/link";
 import { Plus, Search } from "lucide-react";
 import { query } from "@/lib/db";
 
+function formatDate(value) {
+  if (!value) return "";
+  return new Date(value).toISOString().slice(0, 10);
+}
+
 export default async function CeoDashboard() {
   const [officeCount, monthCount, entryCount, latestEntries] = await Promise.all([
     query("SELECT COUNT(*)::int AS total FROM offices WHERE is_active = TRUE"),
@@ -53,7 +58,7 @@ export default async function CeoDashboard() {
             <tbody>
               {latestEntries.rows.map((entry) => (
                 <tr key={`${entry.contact}-${entry.entry_date}`}>
-                  <td>{new Date(entry.entry_date).toLocaleDateString()}</td>
+                  <td>{formatDate(entry.entry_date)}</td>
                   <td>{entry.office_name}</td>
                   <td>{entry.title}</td>
                   <td>{entry.client_name}</td>

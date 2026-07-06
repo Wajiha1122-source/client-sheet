@@ -1,5 +1,15 @@
 import { query } from "@/lib/db";
 
+function formatDate(value) {
+  if (!value) return "";
+  return new Date(value).toISOString().slice(0, 10);
+}
+
+function formatDateTime(value) {
+  if (!value) return "";
+  return new Date(value).toISOString().slice(0, 16).replace("T", " ");
+}
+
 export default async function CeoClientsPage({ searchParams }) {
   const officeId = searchParams?.office || "";
   const monthId = searchParams?.month || "";
@@ -107,7 +117,7 @@ export default async function CeoClientsPage({ searchParams }) {
             <tbody>
               {entries.rows.map((entry) => (
                 <tr key={entry.id}>
-                  <td>{new Date(entry.entry_date).toLocaleDateString()}</td>
+                  <td>{formatDate(entry.entry_date)}</td>
                   <td>{entry.office_name}</td>
                   <td>{entry.month_title}</td>
                   <td>{entry.id_number}</td>
@@ -122,7 +132,7 @@ export default async function CeoClientsPage({ searchParams }) {
                   <td>{entry.experience}</td>
                   <td>{entry.knowledge_baseline}</td>
                   <td>{entry.handled_by}</td>
-                  <td>{entry.visit_date_time ? new Date(entry.visit_date_time).toLocaleString() : ""}</td>
+                  <td>{formatDateTime(entry.visit_date_time)}</td>
                   <td>{entry.visitor_no}</td>
                   <td>{entry.forwarded_by}</td>
                   <td>{entry.notes}</td>
