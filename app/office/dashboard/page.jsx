@@ -31,13 +31,18 @@ const knowledgeBaselines = [
   "Misguided Already"
 ];
 
-function SelectField({ label, name, options, required = true }) {
+function CheckboxGroup({ label, name, options }) {
   return (
     <div className="field">
       <label>{label}</label>
-      <select name={name} required={required} multiple size={Math.min(options.length, 4)} defaultValue={[]}>
-        {options.map((option) => <option key={option} value={option}>{option}</option>)}
-      </select>
+      <div className="checkbox-group">
+        {options.map((option) => (
+          <label className="checkbox-option" key={option}>
+            <input type="checkbox" name={name} value={option} />
+            <span>{option}</span>
+          </label>
+        ))}
+      </div>
     </div>
   );
 }
@@ -113,13 +118,13 @@ export default async function OfficeDashboard({ searchParams }) {
           </div>
 
           <div className="form-section">
-            <SelectField label="Consumer Type" name="consumerType" options={consumerTypes} />
-            <SelectField label="Interested In" name="interestedIn" options={interests} />
-            <SelectField label="Lead Quality" name="leadQuality" options={leadQualities} />
-            <SelectField label="Timeline" name="timeline" options={timelines} />
-            <SelectField label="Market" name="market" options={markets} />
-            <SelectField label="Experience" name="experience" options={experiences} />
-            <SelectField label="Knowledge Baseline" name="knowledgeBaseline" options={knowledgeBaselines} />
+            <CheckboxGroup label="Consumer Type" name="consumerType" options={consumerTypes} />
+            <CheckboxGroup label="Interested In" name="interestedIn" options={interests} />
+            <CheckboxGroup label="Lead Quality" name="leadQuality" options={leadQualities} />
+            <CheckboxGroup label="Timeline" name="timeline" options={timelines} />
+            <CheckboxGroup label="Market" name="market" options={markets} />
+            <CheckboxGroup label="Experience" name="experience" options={experiences} />
+            <CheckboxGroup label="Knowledge Baseline" name="knowledgeBaseline" options={knowledgeBaselines} />
           </div>
 
           <h3>For Office Use</h3>
