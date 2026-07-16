@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { formValue, logActivity, requireApiUser } from "@/lib/api-auth";
+import { formValue, formValues, logActivity, requireApiUser } from "@/lib/api-auth";
 import { query } from "@/lib/db";
 
 export async function POST(request) {
@@ -17,8 +17,15 @@ export async function POST(request) {
   const businessName = formValue(formData, "businessName");
   const cityArea = formValue(formData, "cityArea");
   const phoneWhatsapp = formValue(formData, "phoneWhatsapp");
-  const interestedIn = formValue(formData, "interestedIn");
-  const leadQuality = formValue(formData, "leadQuality");
+  const consumerType = formValues(formData, "consumerType");
+  const interestedIn = formValues(formData, "interestedIn");
+  const leadQuality = formValues(formData, "leadQuality");
+  const timeline = formValues(formData, "timeline");
+  const market = formValues(formData, "market");
+  const experience = formValues(formData, "experience");
+  const knowledgeBaseline = formValues(formData, "knowledgeBaseline");
+  const interestedInText = interestedIn.join(", ");
+  const leadQualityText = leadQuality.join(", ");
 
   await query(
     `INSERT INTO client_entries
@@ -41,19 +48,19 @@ export async function POST(request) {
       businessName,
       cityArea,
       phoneWhatsapp,
-      interestedIn,
-      leadQuality,
+      interestedInText,
+      leadQualityText,
       formValue(formData, "idNumber"),
       cityArea,
       businessName,
       phoneWhatsapp,
-      formValue(formData, "consumerType"),
+      consumerType,
       interestedIn,
       leadQuality,
-      formValue(formData, "timeline"),
-      formValue(formData, "market"),
-      formValue(formData, "experience"),
-      formValue(formData, "knowledgeBaseline"),
+      timeline,
+      market,
+      experience,
+      knowledgeBaseline,
       formValue(formData, "handledBy"),
       formValue(formData, "visitDateTime"),
       formValue(formData, "visitorNo"),

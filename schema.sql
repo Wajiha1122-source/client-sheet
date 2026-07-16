@@ -41,13 +41,13 @@ CREATE TABLE IF NOT EXISTS client_entries (
   city_area TEXT,
   business_name TEXT,
   phone_whatsapp TEXT,
-  consumer_type TEXT,
-  interested_in TEXT,
-  lead_quality TEXT,
-  timeline TEXT,
-  market TEXT,
-  experience TEXT,
-  knowledge_baseline TEXT,
+  consumer_type TEXT[],
+  interested_in TEXT[],
+  lead_quality TEXT[],
+  timeline TEXT[],
+  market TEXT[],
+  experience TEXT[],
+  knowledge_baseline TEXT[],
   handled_by TEXT,
   visit_date_time TIMESTAMPTZ,
   visitor_no TEXT,
@@ -78,13 +78,41 @@ ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS id_number TEXT;
 ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS city_area TEXT;
 ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS business_name TEXT;
 ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS phone_whatsapp TEXT;
-ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS consumer_type TEXT;
-ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS interested_in TEXT;
-ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS lead_quality TEXT;
-ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS timeline TEXT;
-ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS market TEXT;
-ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS experience TEXT;
-ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS knowledge_baseline TEXT;
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS consumer_type TEXT[];
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS interested_in TEXT[];
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS lead_quality TEXT[];
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS timeline TEXT[];
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS market TEXT[];
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS experience TEXT[];
+ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS knowledge_baseline TEXT[];
+DO $$
+DECLARE
+  target_column TEXT;
+BEGIN
+  FOREACH target_column IN ARRAY ARRAY[
+    'consumer_type',
+    'interested_in',
+    'lead_quality',
+    'timeline',
+    'market',
+    'experience',
+    'knowledge_baseline'
+  ]
+  LOOP
+    IF EXISTS (
+      SELECT 1
+      FROM information_schema.columns AS c
+      WHERE c.table_name = 'client_entries'
+        AND c.column_name = target_column
+        AND data_type <> 'ARRAY'
+    ) THEN
+      EXECUTE format(
+        'ALTER TABLE client_entries ALTER COLUMN %1$I TYPE TEXT[] USING CASE WHEN %1$I IS NULL OR btrim(%1$I::text) = '''' THEN NULL ELSE array_remove(string_to_array(%1$I::text, '', ''), '''') END',
+        target_column
+      );
+    END IF;
+  END LOOP;
+END $$;
 ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS handled_by TEXT;
 ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS visit_date_time TIMESTAMPTZ;
 ALTER TABLE client_entries ADD COLUMN IF NOT EXISTS visitor_no TEXT;

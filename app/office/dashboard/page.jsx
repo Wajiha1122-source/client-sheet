@@ -35,12 +35,16 @@ function SelectField({ label, name, options, required = true }) {
   return (
     <div className="field">
       <label>{label}</label>
-      <select name={name} required={required} defaultValue="">
-        <option value="">Select {label.toLowerCase()}</option>
+      <select name={name} required={required} multiple size={Math.min(options.length, 4)} defaultValue={[]}>
         {options.map((option) => <option key={option} value={option}>{option}</option>)}
       </select>
     </div>
   );
+}
+
+function formatValues(value) {
+  if (Array.isArray(value)) return value.filter(Boolean).join(", ");
+  return value || "";
 }
 
 function formatDate(value) {
@@ -161,11 +165,11 @@ export default async function OfficeDashboard({ searchParams }) {
                   <td>{entry.business_name || entry.client_name}</td>
                   <td>{entry.city_area || entry.address}</td>
                   <td>{entry.phone_whatsapp || entry.contact}</td>
-                  <td>{entry.consumer_type}</td>
-                  <td>{entry.interested_in || entry.query}</td>
-                  <td>{entry.lead_quality || entry.result}</td>
-                  <td>{entry.timeline}</td>
-                  <td>{entry.market}</td>
+                  <td>{formatValues(entry.consumer_type)}</td>
+                  <td>{formatValues(entry.interested_in) || entry.query}</td>
+                  <td>{formatValues(entry.lead_quality) || entry.result}</td>
+                  <td>{formatValues(entry.timeline)}</td>
+                  <td>{formatValues(entry.market)}</td>
                   <td>{entry.notes}</td>
                 </tr>
               ))}

@@ -10,6 +10,11 @@ function formatDateTime(value) {
   return new Date(value).toISOString().slice(0, 16).replace("T", " ");
 }
 
+function formatValues(value) {
+  if (Array.isArray(value)) return value.filter(Boolean).join(", ");
+  return value || "";
+}
+
 export default async function CeoClientsPage({ searchParams }) {
   const officeId = searchParams?.office || "";
   const monthId = searchParams?.month || "";
@@ -43,8 +48,8 @@ export default async function CeoClientsPage({ searchParams }) {
       OR ce.business_name ILIKE $${params.length}
       OR ce.phone_whatsapp ILIKE $${params.length}
       OR ce.city_area ILIKE $${params.length}
-      OR ce.interested_in ILIKE $${params.length}
-      OR ce.lead_quality ILIKE $${params.length}
+      OR array_to_string(ce.interested_in, ', ') ILIKE $${params.length}
+      OR array_to_string(ce.lead_quality, ', ') ILIKE $${params.length}
     )`);
   }
 
@@ -124,13 +129,13 @@ export default async function CeoClientsPage({ searchParams }) {
                   <td>{entry.business_name || entry.client_name}</td>
                   <td>{entry.city_area || entry.address}</td>
                   <td>{entry.phone_whatsapp || entry.contact}</td>
-                  <td>{entry.consumer_type}</td>
-                  <td>{entry.interested_in || entry.query}</td>
-                  <td>{entry.lead_quality || entry.result}</td>
-                  <td>{entry.timeline}</td>
-                  <td>{entry.market}</td>
-                  <td>{entry.experience}</td>
-                  <td>{entry.knowledge_baseline}</td>
+                  <td>{formatValues(entry.consumer_type)}</td>
+                  <td>{formatValues(entry.interested_in) || entry.query}</td>
+                  <td>{formatValues(entry.lead_quality) || entry.result}</td>
+                  <td>{formatValues(entry.timeline)}</td>
+                  <td>{formatValues(entry.market)}</td>
+                  <td>{formatValues(entry.experience)}</td>
+                  <td>{formatValues(entry.knowledge_baseline)}</td>
                   <td>{entry.handled_by}</td>
                   <td>{formatDateTime(entry.visit_date_time)}</td>
                   <td>{entry.visitor_no}</td>
