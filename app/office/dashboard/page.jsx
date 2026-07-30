@@ -59,23 +59,28 @@ function formatDate(value) {
 
 export default async function OfficeDashboard({ searchParams }) {
   const user = await requireUser("OFFICE");
+  const excludeFjSeries = user.office_code === "101";
   const selectedMonth = searchParams?.month || "";
   const months = await query(
-    `SELECT em.*, COUNT(ce.id)::int AS entry_count
+    `SELECT em.*,
+            COUNT(ce.id) FILTER (
+              WHERE NOT ($2::boolean AND COALESCE(ce.id_number, '') ~ '^16[0-9]+$')
+            )::int AS entry_count
      FROM entry_months em
      LEFT JOIN client_entries ce ON ce.month_id = em.id
      WHERE em.office_id = $1
      GROUP BY em.id
      ORDER BY em.month_key DESC`,
-    [user.office_id]
+    [user.office_id, excludeFjSeries]
   );
   const monthId = selectedMonth || months.rows[0]?.id || "";
   const entries = monthId
     ? await query(
         `SELECT * FROM client_entries
          WHERE office_id = $1 AND month_id = $2
+           AND NOT ($3::boolean AND COALESCE(id_number, '') ~ '^16[0-9]+$')
          ORDER BY entry_date DESC, created_at DESC`,
-        [user.office_id, monthId]
+        [user.office_id, monthId, excludeFjSeries]
       )
     : { rows: [] };
 

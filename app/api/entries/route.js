@@ -24,8 +24,14 @@ export async function POST(request) {
   const market = formValues(formData, "market");
   const experience = formValues(formData, "experience");
   const knowledgeBaseline = formValues(formData, "knowledgeBaseline");
+  const idNumber = formValue(formData, "idNumber");
   const interestedInText = interestedIn.join(", ");
   const leadQualityText = leadQuality.join(", ");
+
+  const officeResult = await query("SELECT code FROM offices WHERE id = $1", [month.office_id]);
+  if (officeResult.rows[0]?.code === "101" && /^16[0-9]+$/.test(idNumber)) {
+    return NextResponse.redirect(new URL(`/office/dashboard?month=${monthId}&error=invalid-id-series`, request.url), { status: 303 });
+  }
 
   await query(
     `INSERT INTO client_entries
@@ -50,7 +56,7 @@ export async function POST(request) {
       phoneWhatsapp,
       interestedInText,
       leadQualityText,
-      formValue(formData, "idNumber"),
+      idNumber,
       cityArea,
       businessName,
       phoneWhatsapp,
