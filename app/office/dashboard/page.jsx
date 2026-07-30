@@ -79,7 +79,14 @@ export default async function OfficeDashboard({ searchParams }) {
         `SELECT * FROM client_entries
          WHERE office_id = $1 AND month_id = $2
            AND NOT ($3::boolean AND COALESCE(id_number, '') ~ '^16[0-9]+$')
-         ORDER BY entry_date DESC, created_at DESC`,
+         ORDER BY
+           CASE
+             WHEN $3::boolean AND COALESCE(id_number, '') ~ '^[0-9]+$'
+             THEN id_number::numeric
+           END ASC NULLS LAST,
+           CASE WHEN NOT $3::boolean THEN entry_date END DESC,
+           CASE WHEN NOT $3::boolean THEN created_at END DESC,
+           created_at ASC`,
         [user.office_id, monthId, excludeFjSeries]
       )
     : { rows: [] };
