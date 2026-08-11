@@ -15,7 +15,7 @@ function formatValues(value) {
   return value || "";
 }
 
-export default async function CeoClientsPage({ searchParams }) {
+export default async function CeoClientsPage({ searchParams, viewer = false }) {
   const officeId = searchParams?.office || "";
   const monthId = searchParams?.month || "";
   const search = searchParams?.search || "";
@@ -69,13 +69,15 @@ export default async function CeoClientsPage({ searchParams }) {
       <div className="topbar">
         <div>
           <h1 className="page-title">Client Entries</h1>
-          <p className="subtitle">CEO master view grouped by office and month.</p>
+          <p className="subtitle">
+            {viewer ? "Read-only client view organised by office and month." : "CEO master view grouped by office and month."}
+          </p>
         </div>
       </div>
       <section className="card">
         <form className="toolbar">
           <div className="field">
-            <label>Office</label>
+            <label>{viewer ? "Office category" : "Office"}</label>
             <select name="office" defaultValue={officeId}>
               <option value="">All offices</option>
               {offices.rows.map((office) => <option key={office.id} value={office.id}>{office.name}</option>)}

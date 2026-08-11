@@ -6,6 +6,7 @@ export default async function LoginPage() {
   const session = await getSession();
   if (session?.role === "CEO") redirect("/ceo/dashboard");
   if (session?.role === "OFFICE") redirect("/office/dashboard");
+  if (session?.role === "VIEWER") redirect("/viewer/dashboard");
 
   return (
     <main className="login-page">
@@ -19,7 +20,7 @@ export default async function LoginPage() {
         </div>
         <div className="login-form">
           <h2>Login</h2>
-          <p className="subtitle">Use your CEO or office credentials.</p>
+          <p className="subtitle">Use your assigned account credentials.</p>
           <LoginForm />
         </div>
       </section>

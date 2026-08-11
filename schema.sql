@@ -14,12 +14,17 @@ CREATE TABLE IF NOT EXISTS users (
   name TEXT NOT NULL,
   username TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
-  role TEXT NOT NULL CHECK (role IN ('CEO', 'OFFICE')),
+  role TEXT NOT NULL CHECK (role IN ('CEO', 'OFFICE', 'VIEWER')),
+  job_title TEXT,
   office_id UUID REFERENCES offices(id) ON DELETE SET NULL,
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+ALTER TABLE users ADD COLUMN IF NOT EXISTS job_title TEXT;
+ALTER TABLE users DROP CONSTRAINT IF EXISTS users_role_check;
+ALTER TABLE users ADD CONSTRAINT users_role_check CHECK (role IN ('CEO', 'OFFICE', 'VIEWER'));
 
 CREATE TABLE IF NOT EXISTS entry_months (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

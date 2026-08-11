@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { formValue, makeSessionToken, SESSION_COOKIE, verifyPassword } from "@/lib/api-auth";
 import { query } from "@/lib/db";
+import { homeForRole } from "@/lib/auth";
 
 export async function POST(request) {
   const formData = await request.formData();
@@ -14,7 +15,7 @@ export async function POST(request) {
   }
 
   const response = NextResponse.json({
-    redirectTo: user.role === "CEO" ? "/ceo/dashboard" : "/office/dashboard"
+    redirectTo: homeForRole(user.role)
   });
   response.cookies.set(SESSION_COOKIE, await makeSessionToken(user), {
     httpOnly: true,

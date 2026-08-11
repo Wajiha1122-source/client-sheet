@@ -11,7 +11,8 @@
     "start": "node -r ./scripts/readlink-patch.cjs node_modules/next/dist/bin/next start",
     "lint": "next lint",
     "db:migrate": "node scripts/migrate.js",
-    "db:create-ceo": "node scripts/create-ceo.js"
+    "db:create-ceo": "node scripts/create-ceo.js",
+    "db:create-viewer": "node scripts/create-viewer.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -13,15 +13,20 @@ const officeNav = [
   ["/office/manual", HelpCircle, "Urdu Manual"]
 ];
 
+const viewerNav = [
+  ["/viewer/dashboard", ClipboardList, "Client Entries"]
+];
+
 export default function Shell({ user, children }) {
-  const nav = user.role === "CEO" ? ceoNav : officeNav;
+  const nav = user.role === "CEO" ? ceoNav : user.role === "VIEWER" ? viewerNav : officeNav;
+  const roleLabel = user.job_title || user.role;
 
   return (
     <main className="shell">
       <aside className="sidebar">
         <div className="brand">Client Sheet</div>
         <span className="role-pill">
-          <UserCog size={14} /> {user.role} {user.office_name ? `- ${user.office_name}` : ""}
+          <UserCog size={14} /> {roleLabel} {user.office_name ? `- ${user.office_name}` : ""}
         </span>
         <nav className="nav">
           {nav.map(([href, Icon, label]) => (
